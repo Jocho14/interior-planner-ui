@@ -2,7 +2,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 
 import { useEffect, useRef, useState } from "react";
-import { CameraHelper, Mesh, Vector3 } from "three";
+import { CameraHelper } from "three";
 
 const Wall = ({
   position,
@@ -22,7 +22,7 @@ const Wall = ({
   // Rotate and check visibility from the camera
   useFrame(() => {
     if (meshRef.current) {
-      const angle = meshRef.current.rotation.x;
+      //const angle = meshRef.current.rotation.x;
 
       // Update transparency based on camera position or mesh rotation
       // Example: Make the wall transparent when looking directly at it
@@ -47,20 +47,20 @@ const Wall = ({
   );
 };
 
-const Box: React.FC = () => {
-  const boxRef = useRef<Mesh>(null!);
+// const Box: React.FC = () => {
+//   const boxRef = useRef<Mesh>(null!);
 
-  useFrame(() => {
-    boxRef.current.rotation.x += 0.005;
-    boxRef.current.rotation.y += 0.01;
-  });
-  return (
-    <mesh ref={boxRef}>
-      <boxGeometry args={[2, 2, 2]} />
-      <meshStandardMaterial color="orange" />
-    </mesh>
-  );
-};
+//   useFrame(() => {
+//     boxRef.current.rotation.x += 0.005;
+//     boxRef.current.rotation.y += 0.01;
+//   });
+//   return (
+//     <mesh ref={boxRef}>
+//       <boxGeometry args={[2, 2, 2]} />
+//       <meshStandardMaterial color="orange" />
+//     </mesh>
+//   );
+// };
 
 const Scene: React.FC = () => {
   const cameraRef = useRef<any>(null);

@@ -1,4 +1,3 @@
-import LocomotiveScroll from "locomotive-scroll";
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
@@ -9,7 +8,6 @@ import {
   SmartphoneDevice,
   ViewGrid,
 } from "iconoir-react";
-import { useEffect } from "react";
 
 const LandingPage: React.FC = () => {
   return (
