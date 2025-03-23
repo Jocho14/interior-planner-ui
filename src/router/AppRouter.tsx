@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 // import useScrollTop from "@/hooks/useScrollTop";
 import routes from "./routes";
