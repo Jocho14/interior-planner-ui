@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
           <div className="flex flex-col gap-3 lg:max-w-sm">
             <div className="flex items-center gap-2 font-bold text-xl">
               <Box3dCenter className="h-6 w-6 text-primary" />
-              <span>RoomCraft3D</span>
+              <span>InteriorPlanner</span>
             </div>
             <p className="text-sm text-muted-foreground">
               Transform your ideas into reality with our intuitive 3D room
@@ -90,7 +90,7 @@ const Footer: React.FC = () => {
         </div>
         <div className="flex flex-col gap-6 border-t pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} RoomCraft3D. All rights reserved.
+            {new Date().getFullYear()} InteriorPlanner
           </p>
           <div className="flex gap-4">
             <Link

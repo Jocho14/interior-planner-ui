@@ -1,3 +1,4 @@
+import LocomotiveScroll from "locomotive-scroll";
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight,
@@ -8,6 +9,7 @@ import {
   SmartphoneDevice,
   ViewGrid,
 } from "iconoir-react";
+import { useEffect } from "react";
 
 const LandingPage: React.FC = () => {
   return (
@@ -17,7 +19,7 @@ const LandingPage: React.FC = () => {
           <div className="grid gap-6 lg:grid-cols-1 lg:gap-12 xl:grid-cols-1">
             <div className="flex flex-col justify-center items-center space-y-4">
               <div className="space-y-8 text-center">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
+                <h1 className="text-3xl pb-2 font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
                   Design Your Dream Space in 3D
                 </h1>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl mx-auto">
@@ -99,7 +101,7 @@ const LandingPage: React.FC = () => {
             ].map((feature, index) => (
               <div
                 key={index}
-                className="flex flex-col items-center space-y-2 rounded-lg border bg-background p-6 shadow-sm"
+                className="feature-card flex flex-col items-center space-y-2 rounded-lg min-h-[210px] border bg-background p-6 shadow-sm"
               >
                 {feature.icon}
                 <h3 className="text-xl font-bold">{feature.title}</h3>
@@ -157,9 +159,6 @@ const LandingPage: React.FC = () => {
                   <h3 className="text-xl font-bold">{step.title}</h3>
                   <p className="text-muted-foreground">{step.description}</p>
                 </div>
-                {/* {index < 2 && (
-                  <div className="absolute left-8 top-16 h-[calc(100%-4rem)] w-0.5 bg-border hidden lg:block"></div>
-                )} */}
               </div>
             ))}
           </div>
