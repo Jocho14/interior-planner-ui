@@ -29,13 +29,9 @@ const DefaultHeader: React.FC = () => {
           </Link>
         </nav>
         <div className="flex items-center gap-4">
-          <Link
-            to="/login"
-            className="hidden md:flex text-sm font-medium hover:text-primary"
-          >
-            Log in
+          <Link to="/sketch">
+            <Button>Get Started</Button>
           </Link>
-          <Button>Get Started</Button>
         </div>
       </div>
     </header>
