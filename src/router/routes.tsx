@@ -3,7 +3,7 @@ import { lazy } from "react";
 const Main = lazy(() => import("../layouts/Main"));
 const LandingPage = lazy(() => import("../pages/LandingPage"));
 const Scene = lazy(() => import("../scene/Scene"));
-const Room = lazy(() => import("../components/sketch/Room"));
+const Sketch = lazy(() => import("../components/sketch/Sketch"));
 
 const routes = [
   {
@@ -11,7 +11,7 @@ const routes = [
     element: <Main />,
     children: [
       { path: "", element: <LandingPage /> },
-      { path: "/sketch", element: <Room /> },
+      { path: "/sketch", element: <Sketch /> },
       { path: "/stage", element: <Scene /> },
     ],
   },

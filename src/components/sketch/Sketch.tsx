@@ -97,7 +97,7 @@ const Room: React.FC = () => {
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
-      style={{ cursor: "url('../../../public/pencil-icon.svg') 0 24, auto" }}
+      style={{ cursor: "url('/pencil-icon.svg') 0 24, auto" }}
     >
       <Layer>
         <Grid width={width} height={height} />
