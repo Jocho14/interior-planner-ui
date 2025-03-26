@@ -3,15 +3,18 @@ import { BrowserRouter } from "react-router";
 
 import AppRouter from "./router/AppRouter";
 import { SizeProvider } from "./context/SizeContext";
+import { SketchProvider } from "./context/SketchContext";
 
 function App() {
   return (
     <>
-      <SizeProvider>
-        <BrowserRouter>
-          <AppRouter />
-        </BrowserRouter>
-      </SizeProvider>
+      <SketchProvider>
+        <SizeProvider>
+          <BrowserRouter>
+            <AppRouter />
+          </BrowserRouter>
+        </SizeProvider>
+      </SketchProvider>
     </>
   );
 }

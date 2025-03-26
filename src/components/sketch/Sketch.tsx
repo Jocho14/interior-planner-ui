@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Layer, Line, Stage } from "react-konva";
 
-import { GRID_SIZE } from "../constants/2dConstants";
-
+import { GRID_SIZE } from "../../constants/2dConstants";
 import { useSize } from "@/context/SizeContext";
 
 import Grid from "./Grid";
+import { useSketch } from "@/context/SketchContext";
 
 const Room: React.FC = () => {
   const size = useSize();
@@ -13,12 +13,17 @@ const Room: React.FC = () => {
 
   const { width, height } = size;
 
-  const [walls, setWalls] = useState<number[][]>([]);
+  const {
+    walls,
+    undoStack,
+    redoStack,
+    setWalls,
+    handleUndo,
+    handleRedo,
+    setRedoStack,
+    setUndoStack,
+  } = useSketch();
   const [currentWall, setCurrentWall] = useState<number[] | null>(null);
-  console.log(walls);
-
-  const [undoStack, setUndoStack] = useState<number[][][]>([]);
-  const [redoStack, setRedoStack] = useState<number[][][]>([]);
 
   const snapToGrid = (x: number, y: number) => [
     Math.round(x / GRID_SIZE) * GRID_SIZE,
@@ -54,22 +59,6 @@ const Room: React.FC = () => {
       setCurrentWall(null);
       setRedoStack([]);
     }
-  };
-
-  const handleUndo = () => {
-    if (undoStack.length === 0) return;
-    const previousState = undoStack[undoStack.length - 1];
-    setUndoStack(undoStack.slice(0, -1));
-    setRedoStack([...redoStack, walls]);
-    setWalls(previousState);
-  };
-
-  const handleRedo = () => {
-    if (redoStack.length === 0) return;
-    const nextState = redoStack[redoStack.length - 1];
-    setRedoStack(redoStack.slice(0, -1));
-    setUndoStack([...undoStack, walls]);
-    setWalls(nextState);
   };
 
   useEffect(() => {

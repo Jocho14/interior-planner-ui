@@ -2,6 +2,7 @@ import { useLocation } from "react-router";
 
 import DefaultHeader from "@/layouts/headers/DefaultHeader";
 import SketchHeader from "@/layouts/headers/SketchHeader";
+import StageHeader from "@/layouts/headers/StageHeader";
 
 export const useHeader = () => {
   const { pathname } = useLocation();
@@ -10,7 +11,7 @@ export const useHeader = () => {
     case "/sketch":
       return <SketchHeader />;
     case "/stage":
-      return <DefaultHeader />;
+      return <StageHeader />;
     default:
       return <DefaultHeader />;
   }

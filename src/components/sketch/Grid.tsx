@@ -1,5 +1,5 @@
 import { Group, Line } from "react-konva";
-import { GRID_SIZE } from "../constants/2dConstants";
+import { GRID_SIZE } from "../../constants/2dConstants";
 
 interface GridProps {
   width: number;

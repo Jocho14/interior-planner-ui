@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import { Outlet } from "react-router";
 
+import { Toaster } from "@/components/ui/sonner";
+
 import { useSize } from "@/context/SizeContext";
 import { useHeader } from "@/hooks/useHeader";
 import Footer from "./Footer";
@@ -31,8 +33,8 @@ const Main: React.FC = () => {
       {header}
       <main className="min-h-screen" ref={ref}>
         <Outlet />
+        <Toaster />
       </main>
-
       <Footer />
     </>
   );
