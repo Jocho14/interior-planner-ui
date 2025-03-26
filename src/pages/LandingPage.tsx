@@ -8,6 +8,7 @@ import {
   SmartphoneDevice,
   ViewGrid,
 } from "iconoir-react";
+import { Link } from "react-router";
 
 const LandingPage: React.FC = () => {
   return (
@@ -27,9 +28,11 @@ const LandingPage: React.FC = () => {
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                <Button size="lg" className="gap-1">
-                  Start Designing <ArrowRight className="h-4 w-4" />
-                </Button>
+                <Link to="/sketch">
+                  <Button size="lg" className="gap-1">
+                    Start Designing <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
                 <Button size="lg" variant="outline">
                   Watch Demo
                 </Button>

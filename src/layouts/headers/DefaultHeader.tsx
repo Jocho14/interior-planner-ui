@@ -3,7 +3,7 @@ import { Box3dCenter } from "iconoir-react";
 
 import { Button } from "@/components/ui/button";
 
-const Header: React.FC = () => {
+const DefaultHeader: React.FC = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
@@ -29,7 +29,10 @@ const Header: React.FC = () => {
           </Link>
         </nav>
         <div className="flex items-center gap-4">
-          <Link to="/login" className="text-sm font-medium hover:text-primary">
+          <Link
+            to="/login"
+            className="hidden md:flex text-sm font-medium hover:text-primary"
+          >
             Log in
           </Link>
           <Button>Get Started</Button>
@@ -39,4 +42,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header;
+export default DefaultHeader;

@@ -118,3 +118,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .cursor-pencil {
+    cursor: url("/public/pencil-icon.svg"), auto;
+  }
+}
