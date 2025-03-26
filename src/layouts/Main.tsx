@@ -1,5 +1,5 @@
-import { useContext, useEffect, useRef } from "react";
-import { Outlet, useLocation } from "react-router";
+import { useEffect, useRef } from "react";
+import { Outlet } from "react-router";
 
 import { useSize } from "@/context/SizeContext";
 import { useHeader } from "@/hooks/useHeader";

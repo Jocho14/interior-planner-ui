@@ -1,12 +1,9 @@
 import { Link } from "react-router";
 import {
-  ArrowRight,
   Box3dCenter,
-  CubeDots,
   CubeScan,
   LongArrowUpLeft,
   LongArrowUpRight,
-  PerspectiveView,
   ZoomIn,
   ZoomOut,
 } from "iconoir-react";
