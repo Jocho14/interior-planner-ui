@@ -1,13 +1,13 @@
 import { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 
-import useScrollToAnchor from "@/hooks/useScrollToAnchor";
+import useScrollToAnchorTag from "@/hooks/useScrollToAnchorTag";
 import routes from "./routes";
 
 const Loading = () => <h1></h1>;
 
 const AppRouter = () => {
-  useScrollToAnchor();
+  useScrollToAnchorTag();
 
   return (
     <Suspense fallback={<Loading />}>
