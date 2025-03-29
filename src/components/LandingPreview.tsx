@@ -165,8 +165,8 @@ function Pointer({ vec = new THREE.Vector3() }) {
 }
 function Model({ children, color = "white", roughness = 0, ...props }) {
   const ref = useRef();
-  const materials = useLoader(MTLLoader, "/public/models/empty.mtl");
-  const obj = useLoader(OBJLoader, "/public/models/empty.obj", (loader) => {
+  const materials = useLoader(MTLLoader, "/models/empty.mtl");
+  const obj = useLoader(OBJLoader, "/models/empty.obj", (loader) => {
     materials.preload();
     loader.setMaterials(materials);
   });
