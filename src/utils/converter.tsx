@@ -1,10 +1,11 @@
 import { WallType } from "@/types/wall";
 
-import { WALL_HEIGHT, WALL_THICKNESS } from "@/constants/stageConstants";
+import { useStage } from "@/context/StageContext";
 
 export const convertLineToWall = (
   line: [number, number, number, number]
 ): WallType => {
+  const { wallThickness, wallHeight } = useStage();
   let [x1, y1, x2, y2] = line;
   x1 /= 10;
   x2 /= 10;
@@ -20,7 +21,7 @@ export const convertLineToWall = (
 
   return {
     position: [posX - 60, 0, posY - 20],
-    scale: [distance, WALL_HEIGHT / 10, WALL_THICKNESS],
+    scale: [distance, wallHeight / 10, wallThickness],
     rotation: angle,
   };
 };

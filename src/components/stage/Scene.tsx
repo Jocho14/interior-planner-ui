@@ -4,6 +4,7 @@ import { OrbitControls } from "@react-three/drei";
 import Wall from "./Wall";
 import { useSketch } from "@/context/SketchContext";
 import { convertLineToWall } from "@/utils/converter";
+import SideBar from "./SideBar";
 
 const Scene: React.FC = () => {
   const { walls } = useSketch();
@@ -26,6 +27,9 @@ const Scene: React.FC = () => {
         })}
         <OrbitControls />
       </Canvas>
+      <div className="fixed right-0 top-[50%] h-full">
+        <SideBar />
+      </div>
     </div>
   );
 };

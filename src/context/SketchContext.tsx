@@ -24,7 +24,7 @@ const SketchContext = createContext<SketchContextType | undefined>(undefined);
 export const useSketch = () => {
   const context = useContext(SketchContext);
   if (!context) {
-    throw new Error("useSketch must be used within a SizeProvider");
+    throw new Error("useSketch must be used within a SketchProvider");
   }
   return context;
 };

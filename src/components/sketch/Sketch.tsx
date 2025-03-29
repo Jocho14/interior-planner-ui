@@ -80,24 +80,26 @@ const Room: React.FC = () => {
   }, [undoStack, redoStack, walls]);
 
   return (
-    <Stage
-      width={width}
-      height={height}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      style={{ cursor: "url('/pencil-icon.svg') 0 24, auto" }}
-    >
-      <Layer>
-        <Grid width={width} height={height} />
-        {walls.map((points, i) => (
-          <Line key={i} points={points} stroke="black" strokeWidth={3} />
-        ))}
-        {currentWall && (
-          <Line points={currentWall} stroke="black" strokeWidth={3} />
-        )}
-      </Layer>
-    </Stage>
+    <div className="flex flex-row items-center">
+      <Stage
+        width={width}
+        height={height}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        style={{ cursor: "url('/pencil-icon.svg') 0 24, auto" }}
+      >
+        <Layer>
+          <Grid width={width} height={height} />
+          {walls.map((points, i) => (
+            <Line key={i} points={points} stroke="black" strokeWidth={3} />
+          ))}
+          {currentWall && (
+            <Line points={currentWall} stroke="black" strokeWidth={3} />
+          )}
+        </Layer>
+      </Stage>
+    </div>
   );
 };
 

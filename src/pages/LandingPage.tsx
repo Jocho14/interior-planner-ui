@@ -8,7 +8,9 @@ import {
   SmartphoneDevice,
   ViewGrid,
 } from "iconoir-react";
+import { motion } from "motion/react";
 import { Link } from "react-router";
+import LandingPreview from "@/components/LandingPreview";
 
 const LandingPage: React.FC = () => {
   return (
@@ -38,9 +40,9 @@ const LandingPage: React.FC = () => {
                 </Button>
               </div>
             </div>
-            {/* <div className="lg:order-last rounded-xl overflow-hidden border bg-background shadow-xl h-[400px] lg:h-[500px]">
-          <ThreeDPreview />
-        </div> */}
+            <motion.div>
+              <LandingPreview style={{ borderRadius: 20 }} />
+            </motion.div>
           </div>
         </div>
       </section>
@@ -153,9 +155,20 @@ const LandingPage: React.FC = () => {
               },
             ].map((step, index) => (
               <div key={index} className="relative flex flex-col space-y-4">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-2xl font-bold text-primary-foreground">
-                  {step.step}
-                </div>
+                <motion.div
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1.2 }}
+                  transition={{
+                    duration: 1.3,
+                    delay: (index / 10) * 3,
+                    type: "spring",
+                  }}
+                  viewport={{ once: true }}
+                >
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-2xl font-bold text-primary-foreground">
+                    {step.step}
+                  </div>
+                </motion.div>
                 <div className="space-y-2">
                   <h3 className="text-xl font-bold">{step.title}</h3>
                   <p className="text-muted-foreground">{step.description}</p>

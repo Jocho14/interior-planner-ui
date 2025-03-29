@@ -8,7 +8,6 @@ import {
   ZoomIn,
   ZoomOut,
 } from "iconoir-react";
-import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@radix-ui/react-separator";
@@ -64,16 +63,10 @@ const SketchHeader: React.FC = () => {
           </Button>
           <Separator orientation="vertical" color="black" />
           <Button
+            disabled={walls.length === 0}
             variant={"destructive"}
             onClick={() => {
-              walls.length === 0
-                ? toast("The canva is already cleared!", {
-                    action: {
-                      label: "Got it!",
-                      onClick: () => {},
-                    },
-                  })
-                : setIsClearModalOpen(true);
+              setIsClearModalOpen(true);
             }}
           >
             <XmarkCircle />
