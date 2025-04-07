@@ -7,6 +7,8 @@ import {
   useState,
 } from "react";
 
+import { PROJECT_NAME } from "@/constants/localStorage";
+
 interface SketchContextType {
   walls: number[][];
   setWalls: (walls: number[][]) => void;
@@ -31,7 +33,7 @@ export const useSketch = () => {
 
 export const SketchProvider = ({ children }: { children: React.ReactNode }) => {
   const [walls, setWalls] = useState<number[][]>(() => {
-    const savedWalls = localStorage.getItem("walls");
+    const savedWalls = localStorage.getItem(`${PROJECT_NAME}_active_walls`);
     return savedWalls ? JSON.parse(savedWalls) : [];
   });
   const [undoStack, setUndoStack] = useState<number[][][]>([]);
@@ -62,8 +64,7 @@ export const SketchProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    console.log("Saving to localStorage:", walls);
-    localStorage.setItem("walls", JSON.stringify(walls));
+    localStorage.setItem(`${PROJECT_NAME}_active_walls`, JSON.stringify(walls));
   }, [walls]);
 
   return (

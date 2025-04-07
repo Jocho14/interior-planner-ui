@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import {
+  ArrowRight,
   Box3dCenter,
   CubeScan,
   LongArrowUpLeft,
@@ -90,7 +91,7 @@ const SketchHeader: React.FC = () => {
         <div className="flex items-center gap-4">
           <Link to="/stage">
             <Button>
-              Render scene <CubeScan />
+              3D View <CubeScan /> <ArrowRight />
             </Button>
           </Link>
         </div>

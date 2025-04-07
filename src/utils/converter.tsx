@@ -20,7 +20,7 @@ export const convertLineToWall = (
   const angle = -1 * Math.atan2(y1 - y2, x1 - x2);
 
   return {
-    position: [posX - 60, 0, posY - 20],
+    position: [posX - 60, wallHeight / 20, posY - 20],
     scale: [distance, wallHeight / 10, wallThickness],
     rotation: angle,
   };

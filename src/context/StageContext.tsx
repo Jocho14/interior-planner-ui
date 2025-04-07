@@ -1,4 +1,6 @@
+import { PROJECT_NAME } from "@/constants/localStorage";
 import { WALL_HEIGHT, WALL_THICKNESS } from "@/constants/stageConstants";
+// import { UUID } from "@/types/uuid";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface StageContextType {
@@ -6,6 +8,7 @@ interface StageContextType {
   wallHeight: number;
   updateWallThickness: (thickness: number) => void;
   updateWallHeight: (height: number) => void;
+  // setWallMaterial: (id: UUID) => void;
 }
 
 const StageContext = createContext<StageContextType | undefined>(undefined);
@@ -20,11 +23,15 @@ export const useStage = () => {
 
 export const StageProvider = ({ children }: { children: React.ReactNode }) => {
   const [wallThickness, setWallThickness] = useState<number>(() => {
-    const savedWallThickness = localStorage.getItem("wall-thickness");
+    const savedWallThickness = localStorage.getItem(
+      `${PROJECT_NAME}_active_wall-thickness`
+    );
     return savedWallThickness ? JSON.parse(savedWallThickness) : WALL_THICKNESS;
   });
   const [wallHeight, setWallHeight] = useState<number>(() => {
-    const savedWallHeight = localStorage.getItem("wall-height");
+    const savedWallHeight = localStorage.getItem(
+      `${PROJECT_NAME}_active_wall-height`
+    );
     return savedWallHeight ? JSON.parse(savedWallHeight) : WALL_HEIGHT;
   });
 
@@ -36,12 +43,22 @@ export const StageProvider = ({ children }: { children: React.ReactNode }) => {
     setWallHeight(height);
   };
 
+  // const setWallMaterial = (id: UUID) => {
+
+  // }
+
   useEffect(() => {
-    localStorage.setItem("wall-thickness", JSON.stringify(wallThickness));
+    localStorage.setItem(
+      `${PROJECT_NAME}_active_wall-thickness`,
+      JSON.stringify(wallThickness)
+    );
   }, [wallThickness]);
 
   useEffect(() => {
-    localStorage.setItem("wall-height", JSON.stringify(wallHeight));
+    localStorage.setItem(
+      `${PROJECT_NAME}_active_wall-height`,
+      JSON.stringify(wallHeight)
+    );
   }, [wallHeight]);
 
   return (
@@ -51,6 +68,7 @@ export const StageProvider = ({ children }: { children: React.ReactNode }) => {
         wallHeight,
         updateWallHeight,
         updateWallThickness,
+        // setWallMaterial,
       }}
     >
       {children}

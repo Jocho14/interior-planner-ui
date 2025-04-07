@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Box3dCenter, OrthogonalView } from "iconoir-react";
+import { ArrowRight, Box3dCenter, OrthogonalView } from "iconoir-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -17,7 +17,7 @@ const StageHeader: React.FC = () => {
         <div className="flex items-center gap-4">
           <Link to="/sketch">
             <Button>
-              Back To Sketch <OrthogonalView />
+              2D View <OrthogonalView /> <ArrowRight />
             </Button>
           </Link>
         </div>
