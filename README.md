@@ -1,54 +1,51 @@
-# React + TypeScript + Vite
+# 🛋️ 3D Room Planner
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web-based 3D Room Planner built with **React Three Fiber** and **Konva**. Plan your space by drawing in 2D, switching to 3D to visualize the layout, placing furniture, and customizing textures – all in the browser.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## Expanding the ESLint configuration
+- 📝 **2D Drawing Interface** (powered by Konva) to layout walls and zones.
+- 🏠 **3D Visualization** (powered by React Three Fiber) for immersive room previews.
+- 🪑 **Furniture Placement** with drag-and-drop interaction.
+- 🎨 **Texture Customization** for floors, walls, and furniture materials.
+- 🔄 Seamless switching between 2D and 3D modes.
+- 💾 (Optional) Save or export your room layout (coming soon).
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## 🚀 Live Demo
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+👉 [Try it out here](https://interior-planner.netlify.app)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+> _Note: Works best on desktop browsers._
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+---
+
+## 🛠️ Tech Stack
+
+- [React](https://reactjs.org/)
+- [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/)
+- [Konva](https://konvajs.org/)
+- [Three.js](https://threejs.org/)
+- [React-Three-Drei](https://github.com/pmndrs/drei)
+- [Vite](https://vitejs.dev/) for fast development
+
+---
+
+## 📸 Screenshots
+
+[Home Page](./screenshots/home_page.png)
+[2D Drawing Mode](./screenshots/2d_view.png)
+[3D Rendered View](./screenshots/3d_view.png)
+
+---
+
+## 📦 Installation
+
+```bash
+git clone https://github.com/jocho14/interior-planner-ui.git
+cd interior-planner-ui
+npm install
+npm run dev
