@@ -1,7 +1,7 @@
 //@ts-nocheck
 
 import * as THREE from "three";
-import { useRef, useReducer, useMemo } from "react";
+import { useRef, useReducer, useMemo, Suspense } from "react";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import {
   useGLTF,
@@ -9,6 +9,7 @@ import {
   Environment,
   Lightformer,
   OrbitControls,
+  Loader,
 } from "@react-three/drei";
 import {
   CuboidCollider,
@@ -38,70 +39,72 @@ function TestPreview(props) {
   const connectors = useMemo(() => shuffle(accent), [accent]);
   return (
     <div className="w-full h-120 bg-black rounded-3xl">
-      <Canvas
-        onClick={click}
-        shadows
-        dpr={[1, 1.5]}
-        gl={{ antialias: false }}
-        camera={{ position: [0, 0, 18], fov: 17.5, near: 1 }}
-        {...props}
-      >
-        <color attach="background" args={["#141622"]} />
-        <ambientLight intensity={0.4} />
-        <spotLight
-          position={[10, 10, 10]}
-          angle={0.15}
-          penumbra={1}
-          intensity={1}
-          castShadow
-        />
-        <Physics /*debug*/ gravity={[0, 0, 0]}>
-          <Pointer />
-          {connectors.map((props, i) => (
-            <Connector key={i} {...props} />
-          ))}
-          <Connector position={[10, 10, 5]}>
-            <Model>
-              <MeshDistortMaterial clearcoat={1} thickness={0.1} />
-            </Model>
-          </Connector>
-        </Physics>
-        <EffectComposer disableNormalPass multisampling={8}>
-          <N8AO distanceFalloff={1} aoRadius={1} intensity={4} />
-        </EffectComposer>
-        <Environment resolution={256}>
-          <group rotation={[-Math.PI / 3, 0, 1]}>
-            <Lightformer
-              form="circle"
-              intensity={4}
-              rotation-x={Math.PI / 2}
-              position={[0, 5, -9]}
-              scale={2}
-            />
-            <Lightformer
-              form="circle"
-              intensity={2}
-              rotation-y={Math.PI / 2}
-              position={[-5, 1, -1]}
-              scale={2}
-            />
-            <Lightformer
-              form="circle"
-              intensity={2}
-              rotation-y={Math.PI / 2}
-              position={[-5, -1, -1]}
-              scale={2}
-            />
-            <Lightformer
-              form="circle"
-              intensity={2}
-              rotation-y={-Math.PI / 2}
-              position={[10, 1, 0]}
-              scale={8}
-            />
-          </group>
-        </Environment>
-      </Canvas>
+      <Suspense fallback={<Loader />}>
+        <Canvas
+          onClick={click}
+          shadows
+          dpr={[1, 1.5]}
+          gl={{ antialias: false }}
+          camera={{ position: [0, 0, 18], fov: 17.5, near: 1 }}
+          {...props}
+        >
+          <color attach="background" args={["#141622"]} />
+          <ambientLight intensity={0.4} />
+          <spotLight
+            position={[10, 10, 10]}
+            angle={0.15}
+            penumbra={1}
+            intensity={1}
+            castShadow
+          />
+          <Physics /*debug*/ gravity={[0, 0, 0]}>
+            <Pointer />
+            {connectors.map((props, i) => (
+              <Connector key={i} {...props} />
+            ))}
+            <Connector position={[10, 10, 5]}>
+              <Model>
+                <MeshDistortMaterial clearcoat={1} thickness={0.1} />
+              </Model>
+            </Connector>
+          </Physics>
+          <EffectComposer disableNormalPass multisampling={8}>
+            <N8AO distanceFalloff={1} aoRadius={1} intensity={4} />
+          </EffectComposer>
+          <Environment resolution={256}>
+            <group rotation={[-Math.PI / 3, 0, 1]}>
+              <Lightformer
+                form="circle"
+                intensity={4}
+                rotation-x={Math.PI / 2}
+                position={[0, 5, -9]}
+                scale={2}
+              />
+              <Lightformer
+                form="circle"
+                intensity={2}
+                rotation-y={Math.PI / 2}
+                position={[-5, 1, -1]}
+                scale={2}
+              />
+              <Lightformer
+                form="circle"
+                intensity={2}
+                rotation-y={Math.PI / 2}
+                position={[-5, -1, -1]}
+                scale={2}
+              />
+              <Lightformer
+                form="circle"
+                intensity={2}
+                rotation-y={-Math.PI / 2}
+                position={[10, 1, 0]}
+                scale={8}
+              />
+            </group>
+          </Environment>
+        </Canvas>
+      </Suspense>
     </div>
   );
 }
