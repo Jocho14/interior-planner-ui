@@ -40,7 +40,7 @@ const LandingPage: React.FC = () => {
                 </Button>
               </div>
             </div>
-            <motion.div>
+            <motion.div className="w-full">
               <LandingPreview style={{ borderRadius: 20 }} />
             </motion.div>
           </div>

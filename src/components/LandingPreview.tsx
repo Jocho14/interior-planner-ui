@@ -1,7 +1,7 @@
 //@ts-nocheck
 
 import * as THREE from "three";
-import { useRef, useReducer, useMemo, Suspense } from "react";
+import { useRef, useReducer, useMemo, Suspense, useEffect } from "react";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import {
   useGLTF,
@@ -17,28 +17,27 @@ import {
   Physics,
   RigidBody,
 } from "@react-three/rapier";
-import { EffectComposer, N8AO } from "@react-three/postprocessing";
+import {
+  Bloom,
+  DepthOfField,
+  EffectComposer,
+  N8AO,
+} from "@react-three/postprocessing";
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 
-const accents = ["#4060ff", "#20ffa0", "#ff4060", "#ffcc00"];
-const shuffle = (accent = 0) => [
-  { color: "#444", roughness: 0.1 },
-  { color: "#444", roughness: 0.75 },
-  { color: "#444", roughness: 0.75 },
-  { color: "white", roughness: 0.1 },
-  { color: "white", roughness: 0.75 },
-  { color: "white", roughness: 0.1 },
-  { color: accents[accent], roughness: 0.1, accent: true },
-  { color: accents[accent], roughness: 0.75, accent: true },
-  { color: accents[accent], roughness: 0.1, accent: true },
-];
+const accents = ["#ffffff", "#20ffa0", "#ff4060", "#ffcc00"];
+const shuffle = (accent = 0) =>
+  Array.from({ length: 15 }, () => ({
+    color: accents[accent],
+    accent: true,
+  }));
 
-function TestPreview(props) {
+const LandingPreview = (props) => {
   const [accent, click] = useReducer((state) => ++state % accents.length, 0);
   const connectors = useMemo(() => shuffle(accent), [accent]);
   return (
-    <div className="w-full h-120 bg-black rounded-3xl">
+    <div className="w-full h-[60vh] bg-black rounded-3xl">
       <Suspense fallback={<Loader />}>
         <Canvas
           onClick={click}
@@ -49,7 +48,8 @@ function TestPreview(props) {
           {...props}
         >
           <color attach="background" args={["#141622"]} />
-          <ambientLight intensity={0.4} />
+          <ambientLight intensity={0.3} />
+          <directionalLight position={[5, 10, 5]} intensity={0.6} castShadow />
           <spotLight
             position={[10, 10, 10]}
             angle={0.15}
@@ -57,18 +57,24 @@ function TestPreview(props) {
             intensity={1}
             castShadow
           />
-          <Physics /*debug*/ gravity={[0, 0, 0]}>
+          <pointLight position={[0, 5, 0]} intensity={2} color="#ffffff" />
+          <Physics gravity={[0, 0, 0]}>
             <Pointer />
             {connectors.map((props, i) => (
               <Connector key={i} {...props} />
             ))}
             <Connector position={[10, 10, 5]}>
               <Model>
-                <MeshDistortMaterial clearcoat={1} thickness={0.1} />
+                <THREE.MeshStandardMaterial
+                  roughness={0.2}
+                  metalness={0.8}
+                  clearcoat={1}
+                  clearcoatRoughness={0.1}
+                />
               </Model>
             </Connector>
           </Physics>
-          <EffectComposer disableNormalPass multisampling={8}>
+          <EffectComposer>
             <N8AO distanceFalloff={1} aoRadius={1} intensity={4} />
           </EffectComposer>
           <Environment resolution={256}>
@@ -107,7 +113,7 @@ function TestPreview(props) {
       </Suspense>
     </div>
   );
-}
+};
 
 function Connector({
   position,
@@ -126,6 +132,12 @@ function Connector({
       vec.copy(api.current.translation()).negate().multiplyScalar(0.2)
     );
   });
+
+  useFrame(() => {
+    if (api.current) {
+      api.current.applyTorqueImpulse({ x: 0, y: 0.2, z: 0 }, true);
+    }
+  });
   return (
     <RigidBody
       linearDamping={4}
@@ -135,9 +147,7 @@ function Connector({
       ref={api}
       colliders={false}
     >
-      <CuboidCollider args={[0.38, 1.27, 0.38]} />
-      <CuboidCollider args={[1.27, 0.38, 0.38]} />
-      <CuboidCollider args={[0.38, 0.38, 1.27]} />
+      <CuboidCollider args={[1, 1, 1]} />
       {children ? children : <Model {...props} />}
       {accent && <pointLight intensity={4} distance={9} color={props.color} />}
     </RigidBody>
@@ -174,15 +184,30 @@ function Model({ children, color = "white", roughness = 0, ...props }) {
     loader.setMaterials(materials);
   });
 
-  useFrame(() => {
-    if (ref.current) {
-      ref.current.rotation.y += 0.001; // Keep the model active
-    }
-  });
+  const scale = 0.1;
 
-  const clonedObj = obj.clone();
+  const centeredModel = useMemo(() => {
+    const cloned = obj.clone(true);
 
-  return <primitive ref={ref} object={clonedObj} scale={0.1} />;
+    const box = new THREE.Box3().setFromObject(cloned);
+    const center = new THREE.Vector3();
+    box.getCenter(center);
+
+    cloned.traverse((child) => {
+      if (child.isMesh) {
+        child.material = new THREE.MeshStandardMaterial({
+          color: new THREE.Color(color),
+          roughness: 20,
+          metalness: 1.2,
+        });
+        child.geometry.translate(-center.x, -center.y, -center.z);
+      }
+    });
+
+    return cloned;
+  }, [obj]);
+
+  return <primitive ref={ref} object={centeredModel} scale={scale} />;
 }
 
-export default TestPreview;
+export default LandingPreview;

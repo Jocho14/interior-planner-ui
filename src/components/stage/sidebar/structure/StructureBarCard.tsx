@@ -51,7 +51,6 @@ const BarCard: React.FC<BarCardProps> = ({
                 <Label htmlFor="name">{inputLabel}</Label>
                 <Input
                   value={currentValue}
-                  defaultValue={minValue}
                   min={minValue}
                   max={maxValue}
                   onChange={(e) => {
