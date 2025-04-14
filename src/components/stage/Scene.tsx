@@ -33,10 +33,10 @@ const Scene: React.FC = () => {
           <OrbitControls />
           <Floor />
         </Canvas>
-        <div className="fixed right-0 top-[50%] h-full">
-          <SideBar />
-        </div>
       </Suspense>
+      <div className="fixed right-0 top-[50%] h-full">
+        <SideBar />
+      </div>
     </div>
   );
 };
