@@ -1,5 +1,5 @@
 import React from "react";
-import { HTMLMotionProps, motion } from "motion/react";
+import { motion } from "motion/react";
 import { NavArrowLeft, Palette, Ruler, SleeperChair } from "iconoir-react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
