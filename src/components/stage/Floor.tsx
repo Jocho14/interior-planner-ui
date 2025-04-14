@@ -107,7 +107,7 @@ const Floor: React.FC = () => {
 
   const geometry = useMemo(() => {
     const extrudeSettings = {
-      depth: 1,
+      depth: 0.1,
       bevelEnabled: false,
     };
 

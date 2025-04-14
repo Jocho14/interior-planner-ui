@@ -40,10 +40,11 @@ const LandingPreview = (props) => {
     <div className="w-full h-[60vh] bg-black rounded-3xl">
       <Suspense fallback={<Loader />}>
         <Canvas
+          className="w-full"
           onClick={click}
           shadows
           dpr={[1, 1.5]}
-          gl={{ antialias: false }}
+          gl={{ antialias: true }}
           camera={{ position: [0, 0, 18], fov: 17.5, near: 1 }}
           {...props}
         >

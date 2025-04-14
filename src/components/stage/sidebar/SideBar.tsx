@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "motion/react";
+import { HTMLMotionProps, motion } from "motion/react";
 import { NavArrowLeft, Palette, Ruler, SleeperChair } from "iconoir-react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
@@ -48,10 +48,10 @@ const SideBar: React.FC = () => {
     <Sheet>
       <SheetTrigger asChild>
         <motion.div
-          initial={{ opacity: 0, x: 50 }}
+          initial={{ opacity: 0, x: 50, visibility: "visible" }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ type: "spring", duration: 0.8 }}
-          exit={{ opacity: 0 }}
+          style={{ visibility: "visible" }}
         >
           <Button className="h-30 w-10 rounded-tl-lg rounded-bl-lg rounded-br-none rounded-tr-none hover:w-12">
             <NavArrowLeft />
