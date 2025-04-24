@@ -1,13 +1,21 @@
-import { useSketch } from "@/context/SketchContext";
-import { useLoader } from "@react-three/fiber";
 import { useMemo } from "react";
 import {
   BufferAttribute,
   ExtrudeGeometry,
   RepeatWrapping,
   Shape,
+  Texture,
   TextureLoader,
 } from "three";
+import { useLoader } from "@react-three/fiber";
+import { useQuery } from "@tanstack/react-query";
+
+import { getFloorTexture } from "@/api/floors.api";
+
+import { useSketch } from "@/context/SketchContext";
+import { useStage } from "@/context/StageContext";
+
+import { TextureDto } from "@/dto/surface.dto";
 
 const findCycles = (
   graph: Map<string, Set<string>>,
@@ -114,18 +122,34 @@ const Floor: React.FC = () => {
     return new ExtrudeGeometry(shape, extrudeSettings);
   }, [shape]);
 
+  const { floorTextureId, floorTextureDensity } = useStage();
+  const { data: floorTexture } = useQuery<TextureDto>({
+    enabled: !!floorTextureId,
+    queryKey: ["floors", floorTextureId],
+    queryFn: () => getFloorTexture(floorTextureId),
+    staleTime: 3600,
+    refetchOnWindowFocus: false,
+  });
+
   const name = (type: string) => `/textures/WoodFloor007_1K-JPG_${type}.jpg`;
+
+  const texturePaths = useMemo(() => {
+    const fallback = (value: string | undefined, type: string) =>
+      value && value.trim() !== "" ? value : name(type);
+
+    return [
+      fallback(floorTexture?.color, "Color"),
+      fallback(floorTexture?.displacement, "Displacement"),
+      fallback(floorTexture?.normal, "NormalGL"),
+      fallback(floorTexture?.roughness, "Roughness"),
+      fallback(floorTexture?.ambientOcclusion, "AmbientOcclusion"),
+    ];
+  }, [floorTextureId, floorTexture]);
 
   const [colorMap, displacementMap, normalMap, roughnessMap, aoMap] = useLoader(
     TextureLoader,
-    [
-      name("Color"),
-      name("Displacement"),
-      name("NormalGL"),
-      name("Roughness"),
-      name("AmbientOcclusion"),
-    ]
-  );
+    texturePaths
+  ) as Texture[];
 
   geometry.setAttribute(
     "uv2",
@@ -133,7 +157,7 @@ const Floor: React.FC = () => {
   );
 
   colorMap.wrapS = colorMap.wrapT = RepeatWrapping;
-  colorMap.repeat.set(0.1, 0.1);
+  colorMap.repeat.set(floorTextureDensity, floorTextureDensity);
 
   return (
     <mesh
@@ -146,7 +170,7 @@ const Floor: React.FC = () => {
         displacementMap={displacementMap}
         normalMap={normalMap}
         roughnessMap={roughnessMap}
-        aoMap={aoMap}
+        aoMap={aoMap || null}
         displacementScale={0}
       />
     </mesh>

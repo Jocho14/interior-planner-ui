@@ -1,5 +1,4 @@
 //@ts-nocheck
-
 import * as THREE from "three";
 import { useRef, useReducer, useMemo, Suspense, useEffect } from "react";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";

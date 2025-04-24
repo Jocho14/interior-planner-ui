@@ -15,7 +15,11 @@ import { TabsContent } from "@/components/ui/tabs";
 import MaterialsBarCard from "./MaterialsBarCard";
 import { BrickWall } from "lucide-react";
 
-import { getWallsThumbnails } from "@/api/walls.api";
+import { useQuery } from "@tanstack/react-query";
+import { SurfacePreviewDto } from "@/dto/surface.dto";
+import { getWallPreviews } from "@/api/walls.api";
+import { getFloorPreviews } from "@/api/floors.api";
+import { useStage } from "@/context/StageContext";
 // import { fetchTextureData } from "@/api/texture.api";
 
 interface SideBarMaterialsTabProps {
@@ -23,7 +27,31 @@ interface SideBarMaterialsTabProps {
 }
 
 const SideBarMaterialsTab: React.FC<SideBarMaterialsTabProps> = ({ value }) => {
-  // fetchTextureData("plaster001");
+  const {
+    wallTextureId,
+    floorTextureId,
+    wallTextureDensity,
+    floorTextureDensity,
+    updateWallTextureId,
+    updateFloorTextureId,
+    updateWallTextureDensity,
+    updateFloorTextureDensity,
+  } = useStage();
+
+  const { data: wallPreviews, isLoading: wallsLoading } = useQuery<
+    SurfacePreviewDto[]
+  >({
+    queryKey: ["walls"],
+    queryFn: getWallPreviews,
+  });
+
+  const { data: floorPreviews, isLoading: floorsLoading } = useQuery<
+    SurfacePreviewDto[]
+  >({
+    queryKey: ["floors"],
+    queryFn: getFloorPreviews,
+  });
+
   return (
     <TabsContent value={value}>
       <Card className="border-none shadow-none">
@@ -39,13 +67,23 @@ const SideBarMaterialsTab: React.FC<SideBarMaterialsTabProps> = ({ value }) => {
               title="Wall material"
               icon={<BrickWall strokeWidth={1.5} />}
               description="Set a material for the walls"
-              surfacesThumbnails={getWallsThumbnails}
+              surfacePreviews={wallPreviews}
+              surfacesLoading={wallsLoading}
+              surfaceId={wallTextureId}
+              surfaceDensity={wallTextureDensity}
+              updateSurfaceId={updateWallTextureId}
+              handleSurfaceDensityChange={updateWallTextureDensity}
             />
             <MaterialsBarCard
               title="Floor material"
               icon={<PerspectiveView />}
               description="Set a material for the floor"
-              surfacesThumbnails={getWallsThumbnails}
+              surfacePreviews={floorPreviews}
+              surfacesLoading={floorsLoading}
+              surfaceId={floorTextureId}
+              surfaceDensity={floorTextureDensity}
+              updateSurfaceId={updateFloorTextureId}
+              handleSurfaceDensityChange={updateFloorTextureDensity}
             />
           </div>
         </CardContent>

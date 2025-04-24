@@ -1,17 +1,22 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import classNames from "classnames";
 import { CheckCircle } from "iconoir-react";
 
 interface MaterialTileProps {
   imageUrl: string;
+  isLoading: boolean;
   isActive?: boolean;
   setActive: () => void;
 }
 
 const MaterialTile: React.FC<MaterialTileProps> = ({
   imageUrl,
+  isLoading,
   isActive = false,
   setActive,
 }) => {
+  if (isLoading) return <Skeleton className="w-15 h-15 rounded-md border" />;
+
   return (
     <div
       onClick={setActive}
@@ -24,7 +29,6 @@ const MaterialTile: React.FC<MaterialTileProps> = ({
       )}
     >
       {isActive && <CheckCircle width={16} strokeWidth={2} />}
-      {/* <img src={imageUrl} className="w-[200%] h-[200%]" /> */}
     </div>
   );
 };

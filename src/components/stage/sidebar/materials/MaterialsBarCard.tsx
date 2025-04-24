@@ -7,25 +7,32 @@ import {
 } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import MaterialTile from "./MaterialTile";
-import { useState } from "react";
-import { UUID } from "@/types/uuid";
-import { SurfaceThumbnailDto } from "@/dto/surfaceThumbnail.dto";
+import { SurfacePreviewDto } from "@/dto/surface.dto";
+import { Slider } from "@/components/ui/slider";
 
 interface MaterialsBarCardProps {
   title: string;
   description: string;
   icon: React.ReactNode;
-  surfacesThumbnails: SurfaceThumbnailDto[];
+  surfacePreviews: SurfacePreviewDto[] | undefined;
+  surfacesLoading: boolean;
+  surfaceId: string | undefined;
+  surfaceDensity: number;
+  updateSurfaceId: (id: string) => void;
+  handleSurfaceDensityChange: (density: number) => void;
 }
 
 const MaterialsBarCard: React.FC<MaterialsBarCardProps> = ({
   title,
   description,
   icon,
-  surfacesThumbnails,
+  surfacePreviews,
+  surfacesLoading,
+  surfaceId,
+  surfaceDensity,
+  updateSurfaceId,
+  handleSurfaceDensityChange,
 }) => {
-  const [activeTileId, setActiveTileId] = useState<UUID | null>(null);
-
   return (
     <Card className="w-full">
       <CardHeader>
@@ -36,19 +43,34 @@ const MaterialsBarCard: React.FC<MaterialsBarCardProps> = ({
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-25 w-full rounded-md border">
-          <div className="p-4 w-full flex flex-row gap-x-3">
-            {surfacesThumbnails.map((wall) => (
-              <MaterialTile
-                imageUrl={wall.imageUrl}
-                key={wall.id}
-                isActive={wall.id === activeTileId}
-                setActive={() => setActiveTileId(wall.id)}
-              />
-            ))}
-          </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
+        <div className="flex flex-col gap-5">
+          <ScrollArea className="h-25 w-full rounded-md border">
+            <div className="p-4 w-full flex flex-row gap-x-3">
+              {surfacePreviews &&
+                surfacePreviews.map((surfacePreview) => (
+                  <MaterialTile
+                    imageUrl={surfacePreview.imageUrl}
+                    key={surfacePreview.id}
+                    isLoading={surfacesLoading}
+                    isActive={surfacePreview.id === surfaceId}
+                    setActive={() => updateSurfaceId(surfacePreview.id)}
+                  />
+                ))}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+          <p>Density</p>
+          <Slider
+            value={[surfaceDensity]}
+            defaultValue={[0.1]}
+            min={0.01}
+            max={1}
+            step={0.01}
+            onValueChange={(val) => {
+              handleSurfaceDensityChange(val[0]);
+            }}
+          />
+        </div>
       </CardContent>
     </Card>
   );

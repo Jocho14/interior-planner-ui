@@ -1,18 +1,47 @@
-import { WallType } from "@/types/wall";
+import { RepeatWrapping, Texture, TextureLoader } from "three";
+import { useQuery } from "@tanstack/react-query";
 import { useLoader } from "@react-three/fiber";
-import { RepeatWrapping, TextureLoader } from "three";
+import { useMemo } from "react";
+
+import { getWallTexture } from "@/api/walls.api";
+
+import { WallType } from "@/types/wall";
+import { TextureDto } from "@/dto/surface.dto";
+
+import { useStage } from "@/context/StageContext";
 
 const Wall: React.FC<WallType> = ({ position, scale, rotation }) => {
   const name = (type: string) =>
     `/textures/walls/plaster001/Plaster001_1K-PNG_${type}.png`;
 
+  const { wallTextureId, wallTextureDensity } = useStage();
+  const { data: wallTexture } = useQuery<TextureDto>({
+    enabled: !!wallTextureId,
+    queryKey: ["walls", wallTextureId],
+    queryFn: () => getWallTexture(wallTextureId),
+    staleTime: 3600,
+    refetchOnWindowFocus: false,
+  });
+
+  const texturePaths = useMemo(() => {
+    const fallback = (value: string | undefined, type: string) =>
+      value && value.trim() !== "" ? value : name(type);
+
+    return [
+      fallback(wallTexture?.color, "Color"),
+      fallback(wallTexture?.displacement, "Displacement"),
+      fallback(wallTexture?.normal, "NormalGL"),
+      fallback(wallTexture?.roughness, "Roughness"),
+    ];
+  }, [wallTextureId, wallTexture]);
+
   const [colorMap, displacementMap, normalMap, roughnessMap] = useLoader(
     TextureLoader,
-    [name("Color"), name("Displacement"), name("NormalGL"), name("Roughness")]
-  );
+    texturePaths
+  ) as Texture[];
 
   colorMap.wrapS = colorMap.wrapT = RepeatWrapping;
-  colorMap.repeat.set(0.1, 0.1);
+  colorMap.repeat.set(wallTextureDensity, wallTextureDensity);
 
   return (
     <mesh position={position} scale={scale} rotation={[0, rotation ?? 0, 0]}>

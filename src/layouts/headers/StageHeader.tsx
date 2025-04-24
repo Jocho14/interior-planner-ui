@@ -2,6 +2,8 @@ import { Link } from "react-router";
 import { ArrowRight, Box3dCenter, OrthogonalView } from "iconoir-react";
 
 import { Button } from "@/components/ui/button";
+import ViewDropdown from "@/components/stage/ViewDropdown";
+import { Separator } from "@radix-ui/react-separator";
 
 const StageHeader: React.FC = () => {
   return (
@@ -14,7 +16,9 @@ const StageHeader: React.FC = () => {
           </div>
         </Link>
 
+        <ViewDropdown />
         <div className="flex items-center gap-4">
+          <Separator orientation="vertical" />
           <Link to="/sketch">
             <Button>
               2D View <OrthogonalView /> <ArrowRight />
