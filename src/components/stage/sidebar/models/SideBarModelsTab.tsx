@@ -8,14 +8,32 @@ import {
 } from "@/components/ui/card";
 import { TabsContent } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Skeleton } from "@/components/ui/skeleton";
 
 import { capitalize } from "@/utils/strings";
+import { useQuery } from "@tanstack/react-query";
+import { FurniturePreviewDto } from "@/dto/furniture.dto";
+
+import { getFurniturePreviews } from "@/api/furniture.api";
+import ModelTile from "./ModelTile";
+import { useStage } from "@/context/StageContext";
+import { Vector3 } from "three";
+import { getRandomInt } from "@/utils/generators";
 
 interface SideBarModelsTabProps {
   value: string;
 }
 const SideBarModelsTab: React.FC<SideBarModelsTabProps> = ({ value }) => {
+  const { addModel } = useStage();
+
+  const {
+    data: furniturePreviews,
+    error: furnitureError,
+    isLoading: furintureLoading,
+  } = useQuery<FurniturePreviewDto[]>({
+    queryKey: ["furniturePreviews"],
+    queryFn: getFurniturePreviews,
+  });
+
   return (
     <TabsContent value={value}>
       <Card className="border-none shadow-none">
@@ -29,9 +47,21 @@ const SideBarModelsTab: React.FC<SideBarModelsTabProps> = ({ value }) => {
         <CardContent className="space-y-2">
           <ScrollArea className="h-[660px] w-full rounded-md border">
             <div className="p-4 grid grid-cols-2 gap-5">
-              {Array.from({ length: 10 }).map((_, index) => (
-                <Skeleton key={index} className="h-[130px] w-[130px]" />
-              ))}
+              {furniturePreviews &&
+                furniturePreviews.map((preview) => (
+                  <ModelTile
+                    key={preview.id}
+                    imageUrl={preview.thumbnailUrl}
+                    isLoading={furintureLoading}
+                    onClick={() =>
+                      addModel(
+                        preview.id,
+                        new Vector3(getRandomInt(0, 10), 0, getRandomInt(0, 10))
+                      )
+                    }
+                  />
+                ))}
+              {furnitureError && <span>Could not load models</span>}
             </div>
           </ScrollArea>
         </CardContent>

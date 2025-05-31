@@ -39,7 +39,7 @@ const SideBarStructureTab: React.FC<SideBarStructureTabProps> = ({ value }) => {
               icon={<ArrowSeparate />}
               currentValue={wallThickness}
               minValue={WALL_THICKNESS}
-              maxValue={10}
+              maxValue={3}
               sliderStep={0.1}
               handleValueChange={updateWallThickness}
             />

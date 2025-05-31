@@ -3,6 +3,9 @@ import { Vector3 } from "three";
 
 import { PROJECT_NAME } from "@/constants/localStorage";
 import { WALL_HEIGHT, WALL_THICKNESS } from "@/constants/stageConstants";
+import { IModel } from "@/components/stage/Model";
+import { UUID } from "@/types/uuid";
+import { generateUUID } from "@/utils/generators";
 
 interface StageContextType {
   wallThickness: number;
@@ -12,6 +15,7 @@ interface StageContextType {
   floorTextureId: string | undefined;
   wallTextureDensity: number;
   floorTextureDensity: number;
+  models: IModel[];
   updateWallThickness: (thickness: number) => void;
   updateWallHeight: (height: number) => void;
   updateCameraPosition: (position: Vector3 | null) => void;
@@ -19,6 +23,9 @@ interface StageContextType {
   updateFloorTextureId: (id: string) => void;
   updateWallTextureDensity: (density: number) => void;
   updateFloorTextureDensity: (density: number) => void;
+  addModel: (modelId: string, position?: Vector3) => void;
+  updateModel: (id: UUID, position: Vector3) => void;
+  deleteModel: (id: UUID) => void;
 }
 
 const StageContext = createContext<StageContextType | undefined>(undefined);
@@ -50,7 +57,7 @@ export const StageProvider = ({ children }: { children: React.ReactNode }) => {
     const savedWallTexture = localStorage.getItem(
       `${PROJECT_NAME}_active_wall-texture-id`
     );
-    return savedWallTexture ? JSON.parse(savedWallTexture) : undefined;
+    return savedWallTexture ? JSON.parse(savedWallTexture) : "Tiles131";
   });
   const [floorTextureId, setFloorTextureId] = useState<string | undefined>(
     () => {
@@ -58,7 +65,7 @@ export const StageProvider = ({ children }: { children: React.ReactNode }) => {
         `${PROJECT_NAME}_active_floor-texture-id`
       );
 
-      return savedFloorTexture ? JSON.parse(savedFloorTexture) : undefined;
+      return savedFloorTexture ? JSON.parse(savedFloorTexture) : "Plaster003";
     }
   );
 
@@ -74,6 +81,26 @@ export const StageProvider = ({ children }: { children: React.ReactNode }) => {
     );
 
     return savedFloorTexture ? JSON.parse(savedFloorTexture) : 0.01;
+  });
+
+  const [models, setModels] = useState<IModel[]>(() => {
+    const savedModels = localStorage.getItem(`${PROJECT_NAME}_active_models`);
+    if (!savedModels) return [];
+
+    try {
+      const parsed = JSON.parse(savedModels);
+      return parsed.map((model: any) => ({
+        ...model,
+        position: new Vector3(
+          model.position.x,
+          model.position.y,
+          model.position.z
+        ),
+      }));
+    } catch (e) {
+      console.error("Failed to parse saved models", e);
+      return [];
+    }
   });
 
   const updateWallThickness = (thickness: number) => {
@@ -104,6 +131,31 @@ export const StageProvider = ({ children }: { children: React.ReactNode }) => {
     setFloorTextureDensity(density);
   };
 
+  const addModel = (modelId: string, position?: Vector3) => {
+    const id = `${modelId}-${generateUUID()}`;
+    const initialPosition = position ?? new Vector3();
+
+    setModels((models) => [...models, { id, position: initialPosition }]);
+  };
+
+  const updateModel = (id: UUID, position: Vector3) => {
+    setModels((models) => {
+      return models.map((model) => {
+        if (model.id === id) {
+          return {
+            ...model,
+            position: position.clone(),
+          };
+        }
+        return model;
+      });
+    });
+  };
+
+  const deleteModel = (id: UUID) => {
+    setModels((models) => models.filter((model) => model.id !== id));
+  };
+
   useEffect(() => {
     localStorage.setItem(
       `${PROJECT_NAME}_active_wall-thickness`,
@@ -129,7 +181,11 @@ export const StageProvider = ({ children }: { children: React.ReactNode }) => {
       `${PROJECT_NAME}_active_floor-texture-density`,
       JSON.stringify(floorTextureDensity)
     );
-  }, [wallThickness, wallHeight, wallTextureId, floorTextureId]);
+    localStorage.setItem(
+      `${PROJECT_NAME}_active_models`,
+      JSON.stringify(models)
+    );
+  }, [wallThickness, wallHeight, wallTextureId, floorTextureId, models]);
 
   return (
     <StageContext.Provider
@@ -141,6 +197,7 @@ export const StageProvider = ({ children }: { children: React.ReactNode }) => {
         floorTextureId,
         wallTextureDensity,
         floorTextureDensity,
+        models,
         updateWallHeight,
         updateWallThickness,
         updateCameraPosition,
@@ -148,6 +205,9 @@ export const StageProvider = ({ children }: { children: React.ReactNode }) => {
         updateFloorTextureId,
         updateWallTextureDensity,
         updateFloorTextureDensity,
+        addModel,
+        updateModel,
+        deleteModel,
       }}
     >
       {children}

@@ -21,11 +21,11 @@ const ViewDropdown = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline">
-          <VideoCamera /> Change View
+          <VideoCamera /> Perspective
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>View</DropdownMenuLabel>
+        <DropdownMenuLabel>Perspective</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem

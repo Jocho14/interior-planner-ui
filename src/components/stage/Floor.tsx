@@ -16,6 +16,7 @@ import { useSketch } from "@/context/SketchContext";
 import { useStage } from "@/context/StageContext";
 
 import { TextureDto } from "@/dto/surface.dto";
+import SkeletonFloor from "./SkeletonFloor";
 
 const findCycles = (
   graph: Map<string, Set<string>>,
@@ -151,6 +152,15 @@ const Floor: React.FC = () => {
     texturePaths
   ) as Texture[];
 
+  const loadedTextures = useLoader(TextureLoader, texturePaths, (loader) => {
+    loader.setCrossOrigin("anonymous");
+  }) as (Texture | undefined)[];
+
+  const texturesReady = loadedTextures.every((t) => !!t);
+
+  if (!texturesReady) {
+    return <SkeletonFloor geometry={geometry} />;
+  }
   geometry.setAttribute(
     "uv2",
     new BufferAttribute(geometry.attributes.uv.array, 2)
