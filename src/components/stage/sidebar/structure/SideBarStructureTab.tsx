@@ -1,5 +1,5 @@
 import { ArrowSeparate, ArrowSeparateVertical } from "iconoir-react";
-import BarCard from "./StructureBarCard";
+import StructureBarCard from "./StructureBarCard";
 import { useStage } from "@/context/StageContext";
 import { WALL_HEIGHT, WALL_THICKNESS } from "@/constants/stageConstants";
 
@@ -32,7 +32,7 @@ const SideBarStructureTab: React.FC<SideBarStructureTabProps> = ({ value }) => {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-y-5 w-full">
-            <BarCard
+            <StructureBarCard
               title="Wall thickness"
               description="Adjust the thickness of your walls"
               inputLabel="Thickness"
@@ -40,10 +40,11 @@ const SideBarStructureTab: React.FC<SideBarStructureTabProps> = ({ value }) => {
               currentValue={wallThickness}
               minValue={WALL_THICKNESS}
               maxValue={3}
+              unitLabel="cm"
               sliderStep={0.1}
               handleValueChange={updateWallThickness}
             />
-            <BarCard
+            <StructureBarCard
               title="Wall height"
               description="Adjust the height of your walls"
               inputLabel="Height"
@@ -51,7 +52,8 @@ const SideBarStructureTab: React.FC<SideBarStructureTabProps> = ({ value }) => {
               handleValueChange={updateWallHeight}
               currentValue={wallHeight}
               minValue={WALL_HEIGHT}
-              maxValue={200}
+              maxValue={400}
+              unitLabel="cm"
             />
           </div>
         </CardContent>

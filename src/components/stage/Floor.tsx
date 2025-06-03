@@ -17,6 +17,7 @@ import { useStage } from "@/context/StageContext";
 
 import { TextureDto } from "@/dto/surface.dto";
 import SkeletonFloor from "./SkeletonFloor";
+import { RigidBody } from "@react-three/rapier";
 
 const findCycles = (
   graph: Map<string, Set<string>>,
@@ -170,20 +171,22 @@ const Floor: React.FC = () => {
   colorMap.repeat.set(floorTextureDensity, floorTextureDensity);
 
   return (
-    <mesh
-      geometry={geometry}
-      position={[0 - 60, 0, 0 - 20]}
-      rotation={[Math.PI / 2, 0, 0]}
-    >
-      <meshStandardMaterial
-        map={colorMap}
-        displacementMap={displacementMap}
-        normalMap={normalMap}
-        roughnessMap={roughnessMap}
-        aoMap={aoMap || null}
-        displacementScale={0}
-      />
-    </mesh>
+    <RigidBody type="fixed" colliders="hull">
+      <mesh
+        geometry={geometry}
+        position={[0 - 60, 0, 0 - 20]}
+        rotation={[Math.PI / 2, 0, 0]}
+      >
+        <meshStandardMaterial
+          map={colorMap}
+          displacementMap={displacementMap}
+          normalMap={normalMap}
+          roughnessMap={roughnessMap}
+          aoMap={aoMap || null}
+          displacementScale={0}
+        />
+      </mesh>
+    </RigidBody>
   );
 };
 

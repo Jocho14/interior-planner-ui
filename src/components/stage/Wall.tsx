@@ -9,6 +9,7 @@ import { WallType } from "@/types/wall";
 import { TextureDto } from "@/dto/surface.dto";
 
 import { useStage } from "@/context/StageContext";
+import { RigidBody } from "@react-three/rapier";
 
 const Wall: React.FC<WallType> = ({ position, scale, rotation }) => {
   const name = (type: string) =>
@@ -44,16 +45,18 @@ const Wall: React.FC<WallType> = ({ position, scale, rotation }) => {
   colorMap.repeat.set(wallTextureDensity, wallTextureDensity);
 
   return (
-    <mesh position={position} scale={scale} rotation={[0, rotation ?? 0, 0]}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial
-        map={colorMap}
-        displacementMap={displacementMap}
-        normalMap={normalMap}
-        roughnessMap={roughnessMap}
-        displacementScale={0}
-      />
-    </mesh>
+    <RigidBody type="fixed" colliders="cuboid" collisionGroups={0x00020001}>
+      <mesh position={position} scale={scale} rotation={[0, rotation ?? 0, 0]}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial
+          map={colorMap}
+          displacementMap={displacementMap}
+          normalMap={normalMap}
+          roughnessMap={roughnessMap}
+          displacementScale={0}
+        />
+      </mesh>
+    </RigidBody>
   );
 };
 

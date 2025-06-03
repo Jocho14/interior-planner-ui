@@ -16,6 +16,7 @@ import { useQuery } from "@tanstack/react-query";
 import { FurnitureDto } from "@/dto/furniture.dto";
 import { getFurnitureModels } from "@/api/furniture.api";
 import { extractModelId } from "@/utils/strings";
+import { UUID } from "@/types/uuid";
 
 const Scene: React.FC = () => {
   const { walls } = useSketch();
@@ -23,6 +24,7 @@ const Scene: React.FC = () => {
 
   const [isDragging, setIsDragging] = useState(false);
   const orbitRef = useRef<any>(null);
+  const [draggingModelId, setDraggingModelId] = useState<UUID | null>(null);
 
   const { data: modelsData, refetch: refetchModelsData } = useQuery<
     FurnitureDto[]
@@ -60,7 +62,7 @@ const Scene: React.FC = () => {
           className="justify-center items-center"
           camera={{ position: [0, 100, 0], fov: 50 }}
         >
-          <Physics>
+          <Physics debug={false}>
             {cameraPosition && (
               <SmoothCamera
                 targetPosition={cameraPosition}
@@ -81,14 +83,25 @@ const Scene: React.FC = () => {
               })}
             </Suspense>
             <OrbitControls ref={orbitRef} enabled={!isDragging} />
+
             {positionedModels.map((model) => (
               <Model
                 key={model?.id}
                 id={model?.id}
                 position={model?.position}
-                path={"/models/Sofa.glb"} // TODO: change it to: model.path
-                onDragStart={() => setIsDragging(true)}
-                onDragEnd={() => setIsDragging(false)}
+                path={model?.path}
+                isDragging={draggingModelId === model?.id}
+                isAnotherDragging={
+                  draggingModelId !== null && draggingModelId !== model?.id
+                }
+                onDragStart={() => {
+                  setDraggingModelId(model?.id ?? null);
+                  setIsDragging(true);
+                }}
+                onDragEnd={() => {
+                  setDraggingModelId(null);
+                  setIsDragging(false);
+                }}
               />
             ))}
             <Suspense>

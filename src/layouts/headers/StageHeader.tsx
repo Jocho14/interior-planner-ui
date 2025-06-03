@@ -1,5 +1,10 @@
 import { Link } from "react-router";
-import { ArrowRight, Box3dCenter, OrthogonalView } from "iconoir-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Box3dCenter,
+  OrthogonalView,
+} from "iconoir-react";
 
 import { Button } from "@/components/ui/button";
 import ViewDropdown from "@/components/stage/ViewDropdown";
@@ -21,7 +26,7 @@ const StageHeader: React.FC = () => {
           <Separator orientation="vertical" />
           <Link to="/sketch">
             <Button>
-              2D View <OrthogonalView /> <ArrowRight />
+              <ArrowLeft /> 2D View <OrthogonalView />
             </Button>
           </Link>
         </div>

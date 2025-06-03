@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 
-interface BarCardProps {
+interface StructureBarCardProps {
   title: string;
   description: string;
   inputLabel: string;
@@ -19,11 +19,12 @@ interface BarCardProps {
   currentValue: number;
   minValue: number;
   maxValue: number;
+  unitLabel?: string;
   sliderStep?: number;
   handleValueChange: (value: number) => void;
 }
 
-const BarCard: React.FC<BarCardProps> = ({
+const StructureBarCard: React.FC<StructureBarCardProps> = ({
   title,
   description,
   inputLabel,
@@ -31,6 +32,7 @@ const BarCard: React.FC<BarCardProps> = ({
   currentValue,
   minValue,
   maxValue,
+  unitLabel,
   sliderStep,
   handleValueChange,
 }) => {
@@ -49,18 +51,28 @@ const BarCard: React.FC<BarCardProps> = ({
             <div className="flex flex-col space-y-1.5 gap-y-5">
               <div className="flex flex-row gap-5">
                 <Label htmlFor="name">{inputLabel}</Label>
-                <Input
-                  value={currentValue}
-                  min={minValue}
-                  max={maxValue}
-                  onChange={(e) => {
-                    handleValueChange(
-                      Math.min(Number(e.target.value), maxValue)
-                    );
-                  }}
-                  id="name"
-                  placeholder={inputLabel}
-                />
+                <div className="flex flex-row">
+                  <Input
+                    className="rounded-r-none"
+                    value={currentValue}
+                    min={minValue}
+                    max={maxValue}
+                    onChange={(e) => {
+                      handleValueChange(
+                        Math.min(Number(e.target.value), maxValue)
+                      );
+                    }}
+                    id="name"
+                    placeholder={inputLabel}
+                  />
+                  {unitLabel && (
+                    <Input
+                      className="w-[60px] rounded-l-none"
+                      value={unitLabel}
+                      disabled
+                    />
+                  )}
+                </div>
               </div>
 
               <Slider
@@ -81,4 +93,4 @@ const BarCard: React.FC<BarCardProps> = ({
   );
 };
 
-export default BarCard;
+export default StructureBarCard;

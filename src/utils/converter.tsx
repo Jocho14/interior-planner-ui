@@ -16,6 +16,7 @@ export const convertLineToWall = (
   const posY = (y1 + y2) / 2;
 
   const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+  console.log(distance);
 
   const angle = -1 * Math.atan2(y1 - y2, x1 - x2);
 
