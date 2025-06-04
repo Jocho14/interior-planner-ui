@@ -17,7 +17,7 @@ import { useStage } from "@/context/StageContext";
 
 export interface WallRef {
   mesh: Mesh;
-  setVisible: (visible: boolean) => void;
+  setOpacity: (opacity: number) => void;
 }
 
 const Wall = forwardRef<WallRef, WallType>(
@@ -27,9 +27,12 @@ const Wall = forwardRef<WallRef, WallType>(
 
     useImperativeHandle(ref, () => ({
       mesh: meshRef.current!,
-      setVisible: (visible: boolean) => {
-        if (meshRef.current) {
-          meshRef.current.visible = visible;
+      setOpacity: (value: number) => {
+        if (materialRef.current && meshRef.current) {
+          materialRef.current.opacity = value;
+          materialRef.current.transparent = true;
+          materialRef.current.depthWrite = value === 1; // optional: disable depthWrite when transparent
+          meshRef.current.renderOrder = value < 1 ? 1 : 0; // optional: render transparent walls later
         }
       },
     }));

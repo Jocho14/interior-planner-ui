@@ -42,7 +42,7 @@ export const WallTransparencyController: React.FC<Props> = ({
         }
       }
 
-      ref.current.setVisible(!shouldHide);
+      ref.current.setOpacity(shouldHide ? 0.2 : 1);
     });
   });
 
