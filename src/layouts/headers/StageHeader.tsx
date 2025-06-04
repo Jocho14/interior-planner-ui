@@ -1,10 +1,5 @@
 import { Link } from "react-router";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Box3dCenter,
-  OrthogonalView,
-} from "iconoir-react";
+import { ArrowLeft, Box3dCenter, OrthogonalView } from "iconoir-react";
 
 import { Button } from "@/components/ui/button";
 import ViewDropdown from "@/components/stage/ViewDropdown";

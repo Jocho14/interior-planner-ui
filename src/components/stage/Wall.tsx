@@ -1,63 +1,93 @@
-import { RepeatWrapping, Texture, TextureLoader } from "three";
+// Wall.tsx
+import {
+  RepeatWrapping,
+  Texture,
+  TextureLoader,
+  Mesh,
+  MeshStandardMaterial,
+} from "three";
 import { useQuery } from "@tanstack/react-query";
 import { useLoader } from "@react-three/fiber";
-import { useMemo } from "react";
-
+import { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
+import { RigidBody } from "@react-three/rapier";
 import { getWallTexture } from "@/api/walls.api";
-
 import { WallType } from "@/types/wall";
 import { TextureDto } from "@/dto/surface.dto";
-
 import { useStage } from "@/context/StageContext";
-import { RigidBody } from "@react-three/rapier";
 
-const Wall: React.FC<WallType> = ({ position, scale, rotation }) => {
-  const name = (type: string) =>
-    `/textures/walls/plaster001/Plaster001_1K-PNG_${type}.png`;
+export interface WallRef {
+  mesh: Mesh;
+  setVisible: (visible: boolean) => void;
+}
 
-  const { wallTextureId, wallTextureDensity } = useStage();
-  const { data: wallTexture } = useQuery<TextureDto>({
-    enabled: !!wallTextureId,
-    queryKey: ["walls", wallTextureId],
-    queryFn: () => getWallTexture(wallTextureId),
-    staleTime: 3600,
-    refetchOnWindowFocus: false,
-  });
+const Wall = forwardRef<WallRef, WallType>(
+  ({ position, scale, rotation }, ref) => {
+    const meshRef = useRef<Mesh>(null);
+    const materialRef = useRef<MeshStandardMaterial>(null);
 
-  const texturePaths = useMemo(() => {
-    const fallback = (value: string | undefined, type: string) =>
-      value && value.trim() !== "" ? value : name(type);
+    useImperativeHandle(ref, () => ({
+      mesh: meshRef.current!,
+      setVisible: (visible: boolean) => {
+        if (meshRef.current) {
+          meshRef.current.visible = visible;
+        }
+      },
+    }));
 
-    return [
-      fallback(wallTexture?.color, "Color"),
-      fallback(wallTexture?.displacement, "Displacement"),
-      fallback(wallTexture?.normal, "NormalGL"),
-      fallback(wallTexture?.roughness, "Roughness"),
-    ];
-  }, [wallTextureId, wallTexture]);
+    const name = (type: string) =>
+      `/textures/walls/plaster001/Plaster001_1K-PNG_${type}.png`;
 
-  const [colorMap, displacementMap, normalMap, roughnessMap] = useLoader(
-    TextureLoader,
-    texturePaths
-  ) as Texture[];
+    const { wallTextureId, wallTextureDensity } = useStage();
+    const { data: wallTexture } = useQuery<TextureDto>({
+      enabled: !!wallTextureId,
+      queryKey: ["walls", wallTextureId],
+      queryFn: () => getWallTexture(wallTextureId),
+      staleTime: 3600,
+      refetchOnWindowFocus: false,
+    });
 
-  colorMap.wrapS = colorMap.wrapT = RepeatWrapping;
-  colorMap.repeat.set(wallTextureDensity, wallTextureDensity);
+    const texturePaths = useMemo(() => {
+      const fallback = (value: string | undefined, type: string) =>
+        value && value.trim() !== "" ? value : name(type);
+      return [
+        fallback(wallTexture?.color, "Color"),
+        fallback(wallTexture?.displacement, "Displacement"),
+        fallback(wallTexture?.normal, "NormalGL"),
+        fallback(wallTexture?.roughness, "Roughness"),
+      ];
+    }, [wallTextureId, wallTexture]);
 
-  return (
-    <RigidBody type="fixed" colliders="cuboid" collisionGroups={0x00020001}>
-      <mesh position={position} scale={scale} rotation={[0, rotation ?? 0, 0]}>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial
-          map={colorMap}
-          displacementMap={displacementMap}
-          normalMap={normalMap}
-          roughnessMap={roughnessMap}
-          displacementScale={0}
-        />
-      </mesh>
-    </RigidBody>
-  );
-};
+    const [colorMap, displacementMap, normalMap, roughnessMap] = useLoader(
+      TextureLoader,
+      texturePaths
+    ) as Texture[];
+
+    colorMap.wrapS = colorMap.wrapT = RepeatWrapping;
+    colorMap.repeat.set(wallTextureDensity, wallTextureDensity);
+
+    return (
+      <RigidBody type="fixed" colliders="cuboid" collisionGroups={0x00020001}>
+        <mesh
+          ref={meshRef}
+          position={position}
+          scale={scale}
+          rotation={[0, rotation ?? 0, 0]}
+        >
+          <boxGeometry args={[1, 1, 1]} />
+          <meshStandardMaterial
+            ref={materialRef}
+            map={colorMap}
+            displacementMap={displacementMap}
+            normalMap={normalMap}
+            roughnessMap={roughnessMap}
+            displacementScale={0}
+            transparent
+            opacity={1}
+          />
+        </mesh>
+      </RigidBody>
+    );
+  }
+);
 
 export default Wall;

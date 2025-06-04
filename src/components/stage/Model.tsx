@@ -85,9 +85,9 @@ const Model = ({
           onDragEnd?.();
         }}
       >
-        <primitive object={model} scale={5} />
+        <primitive object={model} scale={10} />
         {hovered && (
-          <group scale={5}>
+          <group scale={10}>
             {model.children.map((child, i) => {
               if ((child as THREE.Mesh).isMesh) {
                 const mesh = child as THREE.Mesh;

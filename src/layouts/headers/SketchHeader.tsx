@@ -6,8 +6,6 @@ import {
   LongArrowUpLeft,
   LongArrowUpRight,
   XmarkCircle,
-  ZoomIn,
-  ZoomOut,
 } from "iconoir-react";
 
 import { Button } from "@/components/ui/button";
@@ -15,6 +13,7 @@ import { Separator } from "@radix-ui/react-separator";
 import { useSketch } from "@/context/SketchContext";
 import ModalAlert from "@/components/ModalAlert";
 import { useState } from "react";
+import SketchInfo from "@/components/sketch/SketchInfo";
 
 const SketchHeader: React.FC = () => {
   const [isClearModalOpen, setIsClearModalOpen] = useState(false);
@@ -39,14 +38,10 @@ const SketchHeader: React.FC = () => {
             <span>InteriorPlanner</span>
           </div>
         </Link>
+        <SketchInfo />
+        <Separator orientation="vertical" />
 
         <nav className="hidden md:flex gap-6">
-          <Button variant={"outline"}>
-            <ZoomOut />
-          </Button>
-          <Button variant={"outline"}>
-            <ZoomIn />
-          </Button>
           <Separator orientation="vertical" color="black" />
           <Button
             variant={"outline"}
@@ -87,7 +82,6 @@ const SketchHeader: React.FC = () => {
             />
           )}
         </nav>
-
         <div className="flex items-center gap-4">
           <Link to="/stage">
             <Button>
