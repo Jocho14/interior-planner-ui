@@ -52,11 +52,12 @@ const SideBarModelsTab: React.FC<SideBarModelsTabProps> = ({ value }) => {
                   <ModelTile
                     key={preview.id}
                     imageUrl={preview.thumbnailUrl}
+                    name={preview.name}
                     isLoading={furintureLoading}
                     onClick={() =>
                       addModel(
                         preview.id,
-                        new Vector3(getRandomInt(0, 10), 0, getRandomInt(0, 10))
+                        new Vector3(getRandomInt(0, 10), 5, getRandomInt(0, 10))
                       )
                     }
                   />

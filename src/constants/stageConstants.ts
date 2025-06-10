@@ -1,2 +1,2 @@
 export const WALL_HEIGHT = 100;
-export const WALL_THICKNESS = 0.1;
+export const WALL_THICKNESS = 1;

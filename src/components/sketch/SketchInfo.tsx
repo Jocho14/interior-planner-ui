@@ -1,12 +1,13 @@
+import React from "react";
+
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { InfoCircle, Ruler, Square3dCornerToCorner } from "iconoir-react";
-import React from "react";
-import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
+
+import { Ruler } from "iconoir-react";
 
 export const SketchInfo: React.FC = () => {
   return (

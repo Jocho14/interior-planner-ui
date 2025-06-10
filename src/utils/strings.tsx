@@ -5,3 +5,5 @@ export const capitalize = (s: string) =>
 export const extractModelId = (id: string): string => {
   return id.split("-")[0];
 };
+
+export const snakeToNormalCase = (s: string) => s.replace(/_/g, " ");

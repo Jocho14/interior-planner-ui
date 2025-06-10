@@ -22,7 +22,7 @@ export const convertLineToWall = (
 
   return {
     position: [posX - 60, wallHeight / 20, posY - 20],
-    scale: [distance, wallHeight / 10, wallThickness],
+    scale: [distance, wallHeight / 10, wallThickness / 10],
     rotation: angle,
   };
 };

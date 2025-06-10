@@ -59,7 +59,9 @@ const Scene: React.FC = () => {
         return {
           id: model.id,
           path: mData.model_url,
+          // @ts-ignore
           position: model.position.clone(),
+          // @ts-check
         };
       })
       .filter(Boolean) as { id: UUID; path: string; position: THREE.Vector3 }[];
@@ -69,7 +71,7 @@ const Scene: React.FC = () => {
     () => positionedModels.map((m) => m.position),
     [positionedModels]
   );
-
+  console.log("DRUGGA: ", isDragging);
   return (
     <div className="h-screen">
       <Suspense fallback={<Loader />}>
@@ -90,7 +92,10 @@ const Scene: React.FC = () => {
             <Suspense>
               {walls.map((wall, index) => {
                 if (wall.length !== 4) return null;
+
+                // @ts-ignore
                 const wallProps = convertLineToWall(wall);
+                // @ts-check
                 return (
                   <Wall key={index} ref={wallRefs[index]} {...wallProps} />
                 );
