@@ -3,12 +3,13 @@ import { useDrag } from "@/hooks/useDrag";
 import { UUID } from "@/types/uuid";
 import { useGLTF } from "@react-three/drei";
 import { RapierRigidBody, RigidBody } from "@react-three/rapier";
-import { useRef, useMemo, useState } from "react";
+import { useRef, useMemo, useState, useEffect } from "react";
 import * as THREE from "three";
 
 export interface IModel {
   id: UUID;
   position?: THREE.Vector3;
+  rotation?: THREE.Vector3;
 }
 
 export interface ModelProps extends IModel {
@@ -17,6 +18,8 @@ export interface ModelProps extends IModel {
   onDragEnd?: () => void;
   isDragging?: boolean;
   isAnotherDragging?: boolean;
+  onSelect?: () => void;
+  selected?: boolean;
 }
 
 const Model = ({
@@ -27,6 +30,8 @@ const Model = ({
   onDragEnd,
   isDragging,
   isAnotherDragging,
+  onSelect,
+  rotation,
 }: ModelProps) => {
   const { scene } = useGLTF(path);
   const rigidBodyRef = useRef<RapierRigidBody | null>(null);
@@ -63,6 +68,12 @@ const Model = ({
     }
   );
 
+  useEffect(() => {
+    if (groupRef.current && rotation) {
+      groupRef.current.rotation.y = rotation.y;
+    }
+  }, [rotation]);
+
   return (
     <RigidBody
       ref={rigidBodyRef}
@@ -78,6 +89,7 @@ const Model = ({
         onPointerOut={() => setHovered(false)}
         onPointerDown={(e) => {
           e.stopPropagation();
+          onSelect?.();
           onDragStart?.();
         }}
         onPointerUp={(e) => {

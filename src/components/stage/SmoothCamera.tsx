@@ -47,7 +47,6 @@ const SmoothCamera: React.FC<Props> = ({
     if (trigger) {
       //@ts-ignore
       targetPosRef.current.set(...targetPosition);
-      //@ts-check
 
       if (controlsRef.current) {
         // Sync controls.target with camera look direction before flight

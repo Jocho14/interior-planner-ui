@@ -23,8 +23,8 @@ interface StageContextType {
   updateFloorTextureId: (id: string) => void;
   updateWallTextureDensity: (density: number) => void;
   updateFloorTextureDensity: (density: number) => void;
-  addModel: (modelId: string, position?: Vector3) => void;
-  updateModel: (id: UUID, position: Vector3) => void;
+  addModel: (modelId: string, position?: Vector3, rotation?: Vector3) => void;
+  updateModel: (id: UUID, position: Vector3, rotation?: Vector3) => void;
   deleteModel: (id: UUID) => void;
 }
 
@@ -96,6 +96,7 @@ export const StageProvider = ({ children }: { children: React.ReactNode }) => {
           model.position.y,
           model.position.z
         ),
+        rotation: new Vector3(0, model.rotation.y, 0),
       }));
     } catch (e) {
       console.error("Failed to parse saved models", e);
@@ -131,20 +132,32 @@ export const StageProvider = ({ children }: { children: React.ReactNode }) => {
     setFloorTextureDensity(density);
   };
 
-  const addModel = (modelId: string, position?: Vector3) => {
+  const addModel = (
+    modelId: string,
+    position?: Vector3,
+    rotation?: Vector3
+  ) => {
     const id = `${modelId}-${generateUUID()}`;
     const initialPosition = position ?? new Vector3();
+    const initialRotation = rotation ?? new Vector3();
 
-    setModels((models) => [...models, { id, position: initialPosition }]);
+    setModels((models) => [
+      ...models,
+      { id, position: initialPosition, rotation: initialRotation },
+    ]);
   };
 
-  const updateModel = (id: UUID, position: Vector3) => {
+  const updateModel = (id: UUID, position: Vector3, rotation?: Vector3) => {
+    console.log("fukin rotation: ", rotation);
     setModels((models) => {
       return models.map((model) => {
         if (model.id === id) {
           return {
             ...model,
             position: position.clone(),
+            rotation: rotation
+              ? rotation.clone()
+              : model.rotation?.clone() ?? new Vector3(),
           };
         }
         return model;

@@ -20,7 +20,6 @@ import { SurfacePreviewDto } from "@/dto/surface.dto";
 import { getWallPreviews } from "@/api/walls.api";
 import { getFloorPreviews } from "@/api/floors.api";
 import { useStage } from "@/context/StageContext";
-// import { fetchTextureData } from "@/api/texture.api";
 
 interface SideBarMaterialsTabProps {
   value: string;

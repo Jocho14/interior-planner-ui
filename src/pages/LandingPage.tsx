@@ -11,6 +11,7 @@ import {
 import { motion } from "motion/react";
 import { Link } from "react-router";
 import LandingPreview from "@/components/LandingPreview";
+import AppDemo from "@/components/AppDemo";
 
 const LandingPage: React.FC = () => {
   return (
@@ -35,9 +36,7 @@ const LandingPage: React.FC = () => {
                     Start Designing <ArrowRight className="h-4 w-4" />
                   </Button>
                 </Link>
-                <Button size="lg" variant="outline">
-                  Watch Demo
-                </Button>
+                <AppDemo />
               </div>
             </div>
             <LandingPreview style={{ borderRadius: 20 }} />

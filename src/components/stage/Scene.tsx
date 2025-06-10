@@ -1,4 +1,3 @@
-// Scene.tsx
 import React, { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Loader, OrbitControls } from "@react-three/drei";
@@ -20,6 +19,7 @@ import { extractModelId } from "@/utils/strings";
 import { UUID } from "@/types/uuid";
 import { WallTransparencyController } from "./WallTransparencyController";
 import { useSketch } from "@/context/SketchContext";
+import ModelActions from "./ModelActions";
 
 const Scene: React.FC = () => {
   const { walls } = useSketch();
@@ -27,6 +27,23 @@ const Scene: React.FC = () => {
 
   const [isDragging, setIsDragging] = useState(false);
   const [draggingModelId, setDraggingModelId] = useState<UUID | null>(null);
+  const [selectedModelId, setSelectedModelId] = useState<UUID | null>(null);
+  const [rotationValue, setRotationValue] = useState(0);
+  const prevSelected = useRef<UUID | null>(null);
+
+  // Initialize slider once upon selection change
+  useEffect(() => {
+    if (selectedModelId && prevSelected.current !== selectedModelId) {
+      prevSelected.current = selectedModelId;
+      const m = models.find((m) => m.id === selectedModelId);
+      if (m) {
+        const deg = (m.rotation?.y ?? 0) * (180 / Math.PI);
+        setRotationValue(deg);
+      }
+    }
+  }, [selectedModelId, models]);
+
+  const { updateModel, deleteModel } = useStage();
 
   const orbitRef = useRef<any>(null);
 
@@ -48,30 +65,31 @@ const Scene: React.FC = () => {
     }
   }, [models, refetchModelsData]);
 
-  const positionedModels = useMemo(() => {
-    if (!modelsData) return [];
-    return models
-      .map((model) => {
-        const mData = modelsData.find(
-          (d) => String(d.id) === extractModelId(model.id)
-        );
-        if (!mData) return null;
-        return {
-          id: model.id,
-          path: mData.model_url,
-          // @ts-ignore
-          position: model.position.clone(),
-          // @ts-check
-        };
-      })
-      .filter(Boolean) as { id: UUID; path: string; position: THREE.Vector3 }[];
-  }, [modelsData, models]);
+  const positionedModels = models
+    .map((m) => {
+      const modelData = modelsData?.find(
+        (d) => String(d.id) === extractModelId(m.id)
+      );
+      if (!modelData) return null;
+      return {
+        id: m.id,
+        path: modelData.model_url,
+        //@ts-ignore
+        position: m.position.clone(),
+        rotation: m.rotation?.clone() ?? new THREE.Vector3(0, 0, 0),
+      };
+    })
+    .filter(Boolean) as {
+    id: UUID;
+    path: string;
+    position: THREE.Vector3;
+    rotation: THREE.Vector3;
+  }[];
 
   const modelPositions = useMemo(
     () => positionedModels.map((m) => m.position),
     [positionedModels]
   );
-  console.log("DRUGGA: ", isDragging);
   return (
     <div className="h-screen">
       <Suspense fallback={<Loader />}>
@@ -115,6 +133,7 @@ const Scene: React.FC = () => {
                 position={model.position}
                 path={model.path}
                 isDragging={draggingModelId === model.id}
+                rotation={model.rotation}
                 isAnotherDragging={
                   draggingModelId !== null && draggingModelId !== model.id
                 }
@@ -126,6 +145,8 @@ const Scene: React.FC = () => {
                   setDraggingModelId(null);
                   setIsDragging(false);
                 }}
+                onSelect={() => setSelectedModelId(model.id)}
+                selected={selectedModelId === model.id}
               />
             ))}
 
@@ -134,6 +155,27 @@ const Scene: React.FC = () => {
             </Suspense>
           </Physics>
         </Canvas>
+        {selectedModelId && (
+          <ModelActions
+            rotationValue={rotationValue}
+            onRotateChange={(deg) => {
+              setRotationValue(deg);
+              const m = models.find((m) => m.id === selectedModelId);
+              if (!m) return;
+              const rad = (deg * Math.PI) / 180;
+              updateModel(
+                m.id,
+                //@ts-ignore
+                m.position.clone(),
+                new THREE.Vector3(0, rad, 0)
+              );
+            }}
+            onDelete={() => {
+              deleteModel(selectedModelId);
+              setSelectedModelId(null);
+            }}
+          />
+        )}
       </Suspense>
       <div className="fixed right-0 top-[50%] h-full">
         <SideBar />
